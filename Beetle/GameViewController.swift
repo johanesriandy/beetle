@@ -15,16 +15,18 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scene = GameScene(size: view.bounds.size)
-        let skView = view as! SKView
-        
-        skView.showsFPS = false
-        skView.showsNodeCount = false
-        skView.ignoresSiblingOrder = false
-        
-        scene.scaleMode = .resizeFill
-        
-        skView.presentScene(scene)
+        if let view = self.view as! SKView? {
+            let scene = GameScene(size: view.bounds.size)
+            view.ignoresSiblingOrder = false
+            view.showsFPS = false
+            view.showsNodeCount = false
+            
+            // Set the scale mode to scale to fit the window
+            scene.scaleMode = .resizeFill
+                
+            // Present the scene
+            view.presentScene(scene)
+        }
     }
 
     override var shouldAutorotate: Bool {
@@ -37,6 +39,13 @@ class GameViewController: UIViewController {
         } else {
             return .all
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard let view = self.view as? SKView else { return }
+        (view.scene as? GameScene)?.refreshScene()
     }
     
     override func didReceiveMemoryWarning() {

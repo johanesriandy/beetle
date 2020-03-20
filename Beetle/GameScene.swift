@@ -14,16 +14,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var isGameStarted = Bool(false)
     var isDied = Bool(false)
     let coinSound = SKAction.playSoundFileNamed("CoinSound.mp3", waitForCompletion: false)
-    
-    var score = Int(0)
+
+    var score: Int = 0;
     var scoreLabel = SKLabelNode()
-    var highScoreLabel = SKLabelNode()
+    var highscoreLabel = SKLabelNode()
     var taptoplayLabel = SKLabelNode()
     var restartButton = SKSpriteNode()
     var pauseButton = SKSpriteNode()
     var logoImage = SKSpriteNode()
     var wallPair = SKNode()
     var moveAndRemove = SKAction()
+    var safeArea = SafeAreaNode()
     
     let birdAtlas = SKTextureAtlas(named: "player")
     var birdSprites = Array<SKTexture>()
@@ -74,7 +75,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(background)
         }
 
-        //SET UP THE BIRD SPRITES FOR ANIMATION
         birdSprites.append(birdAtlas.textureNamed("bird1"))
         birdSprites.append(birdAtlas.textureNamed("bird2"))
         birdSprites.append(birdAtlas.textureNamed("bird3"))
@@ -82,8 +82,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.bird = createBird()
         self.addChild(bird)
+        self.addChild(safeArea)
         
         let animateBird = SKAction.animate(with: self.birdSprites, timePerFrame: 0.1)
         self.repeatActionBird = SKAction.repeatForever(animateBird)
+        
+        createScoreLabel()
+        createHighscoreLabel()
+        createLogo()
+        createTaptoplayLabel()
+    }
+    
+    func refreshScene() {
+        safeArea.refresh()
     }
 }
